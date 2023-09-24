@@ -26,8 +26,8 @@ services:
       MYSQL_ROOT_PASSWORD: 
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
-    networks:
-      - nginx-proxy
+    # networks:
+    #  - nginx-proxy
     volumes:
       - ./sql_scripts:/docker-entrypoint-initdb.d
       - ./mysql:/var/lib/mysql
@@ -41,8 +41,8 @@ services:
     working_dir: /var/www/html
     depends_on:
       - laravel
-    networks:
-      - nginx-proxy
+    # networks:
+    #  - nginx-proxy
 
   npm:
     image: node:16
@@ -64,8 +64,8 @@ services:
       - mysql
     working_dir: /var/www/html
     entrypoint: ['php', '/var/www/html/artisan']
-    networks:
-      - nginx-proxy
+    # networks:
+    #  - nginx-proxy
 
 networks:
   default:
