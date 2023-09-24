@@ -22,8 +22,7 @@ services:
       - "3306:3306"
     environment:
       MYSQL_DATABASE: laravel
-      MYSQL_PASSWORD: 
-      MYSQL_ROOT_PASSWORD: 
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     # networks:
@@ -38,7 +37,7 @@ services:
     container_name: laravel_composer
     volumes:
       - ./src:/var/www/html
-    working_dir: /var/www/html
+    working_dir: .
     depends_on:
       - laravel
     # networks:
@@ -50,7 +49,7 @@ services:
     user: "1000:1000"
     volumes:
       - ./src:/var/www/html
-    working_dir: /var/www/html
+    working_dir: .
     entrypoint: ['npm']
 
   artisan:
@@ -62,7 +61,7 @@ services:
       - ./src:/var/www/html
     depends_on:
       - mysql
-    working_dir: /var/www/html
+    working_dir: .
     entrypoint: ['php', '/var/www/html/artisan']
     # networks:
     #  - nginx-proxy
