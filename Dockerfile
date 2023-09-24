@@ -1,6 +1,6 @@
-FROM php:8-fpm-alpine
+FROM php:8.2-fpm-alpine
 ARG uid=1000
-ARG user=ifan
+ARG user=vin
 
 RUN docker-php-ext-install pdo pdo_mysql
 
@@ -10,7 +10,13 @@ RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93
 RUN apk add --update-cache git curl zip unzip \
   && rm -rf /var/cache/apk/*
 
+COPY . .
+
 RUN adduser -u $uid -h /home/$user -D $user $user
 RUN mkdir -p /home/$user/.composer && chown -R $user:$user /home/$user
 
 USER $user
+
+CMD ["composer", "install"]
+CMD ["npm", "run", "build"]
+CMD ["php", "artisan", "serve"]
