@@ -33,7 +33,7 @@ services:
       - ./mysql:/var/lib/mysql
 
   composer:
-    image: compser:latest
+    image: composer:latest
     user: "1000:1000"
     container_name: laravel_composer
     volumes:
