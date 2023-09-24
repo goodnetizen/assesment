@@ -37,7 +37,7 @@ services:
     container_name: laravel_composer
     volumes:
       - ./src:/var/www/html
-    working_dir: ./var/www/html
+    working_dir: /var/www/html
     depends_on:
       - laravel
     # networks:
@@ -49,7 +49,7 @@ services:
     user: "1000:1000"
     volumes:
       - ./src:/var/www/html
-    working_dir: ./var/www/html
+    working_dir: /var/www/html
     entrypoint: ['npm']
 
   artisan:
@@ -61,7 +61,7 @@ services:
       - ./src:/var/www/html
     depends_on:
       - mysql
-    working_dir: ./var/www/html
+    working_dir: /var/www/html
     entrypoint: ['php', '/var/www/html/artisan']
     # networks:
     #  - nginx-proxy
