@@ -1,17 +1,71 @@
 version: '3'
 
 services:
-    laravel:
-        build:
-          context: .
-          dockerfile: Dockerfile
-        expose:
-          - "3000"
-        restart: always
-        environment:
-          VIRTUAL_HOST: assesment.vin.web.id
-          LETSENCRYPT_HOST: assesment.vin.web.id
-        container_name: assesment.vin.web.id
+  laravel:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      expose:
+        - "3000"
+      restart: always
+      environment:
+        VIRTUAL_HOST: assesment.vin.web.id
+        LETSENCRYPT_HOST: assesment.vin.web.id
+      container_name: assesment.vin.web.id
+
+  mysql:
+    image: mysql:8
+    command: mysqld --sql_mode=""
+    container_name: laravel_mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: 
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - nginx-proxy
+    volumes:
+      - ./sql_scripts:/docker-entrypoint-initdb.d
+      - ./mysql:/var/lib/mysql
+
+  composer:
+    image: compser:latest
+    user: "1000:1000"
+    container_name: laravel_composer
+    volumees:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      - laravel
+    networks:
+      - nginx-proxy
+
+  npm:
+    image: node:16
+    container_name: laravel_npm
+    user: "1000:1000"
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ['npm']
+
+  artisan:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_artisan
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - mysql
+    working_dir: /var/www/html
+    entrypoint: ['php', '/var/www/html/artisan']
+    networks:
+      - nginx-proxy
 
 networks:
   default:
