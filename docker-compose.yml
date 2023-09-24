@@ -36,7 +36,7 @@ services:
     image: compser:latest
     user: "1000:1000"
     container_name: laravel_composer
-    volumees:
+    volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
     depends_on:
